@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能教学管理系统</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Roboto', sans-serif;
+            background-image: url('https://source.unsplash.com/random/1920x1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .header {
+            background-color: rgba(255, 235, 59, 0.8);
+            height: 64px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            color: #333;
+        }
+        .header-title {
+            font-size: 32px; /* 调整字体大小 */
+            font-weight: bold;
+            color: #333333;
+            margin: 0;
+            flex: 1; /* 使标题靠左 */
+            text-align: left;
+            padding: 16px 0; /* 上下内边距 */
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden; /* 防止滚动条出现 */
+        }
+        .left {
+            background-color: rgba(76, 175, 80, 0.8);
+            width: 240px;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            box-sizing: border-box;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+        .main {
+            background-color: rgba(33, 150, 243, 0.8);
+            flex: 1;
+            display: flex;
+            align-items: stretch; /* 使iframe填满父容器 */
+            justify-content: stretch;
+            overflow: hidden; /* 防止滚动条出现 */
+            padding: 0; /* 去除内边距 */
+        }
+        .dy-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .dy-button:hover {
+            background-color: #0056b3;
+        }
+        .section {
+            margin-bottom: 16px;
+        }
+        .section-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: white;
+            font-weight: 500;
+            padding: 8px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .section-header:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .section-header::after {
+            content: 'expand_more';
+            font-family: 'Material Icons';
+            margin-left: auto;
+        }
+        .section-content {
+            display: none;
+            padding-left: 20px;
+            color: white;
+            margin-top: 8px;
+        }
+        .section.open .section-content {
+            display: block;
+        }
+        .section.open .section-header::after {
+            content: 'expand_less';
+        }
+        .static-item {
+            color: white;
+            font-weight: 500;
+            margin-bottom: 16px;
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer; /* 使静态项看起来像按钮 */
+        }
+        .section-content div {
+            margin-bottom: 12px; /* 增加2和3之间的间隔 */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">智能教学管理系统</div>
+        <button class="dy-button" onclick="navigateTo('forgotPassword.html')">修改密码</button>
+        <button class="dy-button" onclick="navigateTo('login.html')">退出登录</button>
+    </div>
+    <div class="container">
+        <div class="left">
+            <div id="homeButton" class="static-item" onclick="loadMain()">首页</div>
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">班级学员管理</div>
+                <div class="section-content">
+                    <div onclick="loadClassManagement()">班级管理</div>
+                    <div onclick="loadStudentManagement()">学员管理</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">学生信息管理</div>
+                <div class="section-content">
+                    <div onclick="loadDepartmentManagement()">部门管理</div>
+                    <div onclick="loadEmployeeManagement()">员工管理</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">数据统计管理</div>
+                <div class="section-content">
+                    <div>员工信息统计</div>
+                    <div>学员信息统计</div>
+                </div>
+            </div>
+            <div class="static-item" onclick="loadForm()">反馈与致谢</div>
+        </div>
+        <div class="main">
+            <iframe id="contentFrame"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('open');
+        }
+
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+
+        function loadMain() {
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = 'main.html';
+        }
+
+        function loadForm() {
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = 'form.html';
+        }
+
+        function loadClassManagement() {
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = 'classManagement.html';
+        }
+
+        function loadStudentManagement() {
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = 'student_Management.html';
+        }
+
+        function loadDepartmentManagement() {
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = 'departmentManagement.html';
+        }
+
+        function loadEmployeeManagement() {
+            const iframe = document.getElementById('contentFrame');
+            iframe.src = 'EmployeeManagement.html';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+        const iframe = document.getElementById('contentFrame');
+        iframe.src = 'main.html';
+    });
+
+
+    </script>
+</body>
+</html>
